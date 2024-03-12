@@ -1,0 +1,72 @@
+// * Code by Ducsjukapvippro
+// * dont cry bae =))
+// * minh luon luon khong biet tat ca moi thu
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+#define __ducsjukap__() int main()
+#define fr(i, a, b) for (i = a; i < b; ++i)
+#define fd(i, a, b) for (i = a; i <= b; ++i)
+#define dr(i, a, b) for (i = a; i > b; --i)
+#define dd(i, a, b) for (i = a; i >= b; --i)
+typedef long long ll;
+typedef long double ld;
+
+int linear_search(vector<int> &v, int &data)
+{
+    // if found => return position
+    // if not found => return -1
+    for (int i = 0; i < v.size(); ++i)
+        if (v[i] == data)
+            return i;
+    return -1;
+}
+
+int sentinel_linear_search(vector<int> &v, int &data)
+{
+    // if found => return position
+    // if not found => return vector.size()
+    v.push_back(data);
+    for (int i = 0; 1; ++i) // khong can so sanh i vs v.size()
+        if (v[i] == data)
+            return i;
+}
+
+void __vippro__()
+{
+    system("cls");
+    int vector_size;
+
+    cout << "size of vector = ";
+    cin >> vector_size;
+    vector<int> v(vector_size);
+    cout << "enter element of vector:\n";
+    for (int &i : v)
+        cin >> i;
+
+    int find_value;
+    cout << "find : ";
+    cin >> find_value;
+
+    int pos1 = linear_search(v, find_value);
+    int pos2 = sentinel_linear_search(v, find_value);
+    cout << "Linear_search result: " << pos1 << '\n';
+    cout << "Sentinel_linear_search result: " << pos2 << '\n';
+    system("pause");
+}
+
+__ducsjukap__()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    int T;
+    cin >> T;
+    dr(T, T, 0)
+        __vippro__();
+    return 0;
+}
+// * Code by Ducsjukapvippro
