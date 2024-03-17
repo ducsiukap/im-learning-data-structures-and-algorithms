@@ -15,22 +15,25 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-void __vippro__()
+void __vippro__() 
 {
-    int n, k;
-    cin >> n >> k;
+    int n, i, j, pivot;
+    cin >> n;
     vector<int> v(n);
-
-    int i;
     fr(i, 0, n) cin >> v[i];
-    sort(v.begin(), v.end());
-    ll ans = 0;
     fr(i, 0, n)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
-    }
-    cout << ans << '\n';
+    	pivot = v[i];
+    	dd(j, i - 1, 0)
+    		if(v[j] > pivot)
+    			swap(v[j], v[j + 1]);
+    		else 
+    			break;
+    	cout << "Buoc " << i << ':';
+    	fd(j, 0, i) cout << ' ' << v[j];
+    	cout << '\n';
+	}
+    
 }
 
 __ducsjukap__()
@@ -39,8 +42,8 @@ __ducsjukap__()
     cin.tie(nullptr);
     cout.tie(nullptr);
     int T;
-    cin >> T;
-    dr(T, T, 0)
+//    cin >> T;
+//    dr(T, T, 0)
         __vippro__();
     return 0;
 }

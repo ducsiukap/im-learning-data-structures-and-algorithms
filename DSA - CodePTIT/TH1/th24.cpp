@@ -15,22 +15,24 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
-void __vippro__()
+void __vippro__() 
 {
     int n, k;
     cin >> n >> k;
     vector<int> v(n);
-
+    
     int i;
     fr(i, 0, n) cin >> v[i];
     sort(v.begin(), v.end());
-    ll ans = 0;
+    int ans = 0;
     fr(i, 0, n)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
-    }
-    cout << ans << '\n';
+    	if (v[i] >= k)
+    		break;
+    	auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
+    	ans += it - v.begin() - i;
+	}
+	cout << ans << '\n';
 }
 
 __ducsjukap__()

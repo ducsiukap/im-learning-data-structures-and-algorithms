@@ -1,36 +1,45 @@
 // * Code by Ducsjukapvippro
 // * dont cry bae =))
-// * minh luon luon khong biet tat ca moi thu
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <math.h>
 using namespace std;
 
 #define __ducsjukap__() int main()
 #define fr(i, a, b) for (i = a; i < b; ++i)
-#define fd(i, a, b) for (i = a; i <= b; ++i)
+#define fd(i, a, b) for (i = a; i < b; ++i)
 #define dr(i, a, b) for (i = a; i > b; --i)
 #define dd(i, a, b) for (i = a; i >= b; --i)
 typedef long long ll;
 typedef long double ld;
 
+int x;
+
+bool cmp(pair<int, int> &a, pair<int, int> &b)
+{
+    int i = abs(x - a.first);
+    int j = abs(x - b.first);
+    if (i == j)
+        return a.second < b.second;
+    return i < j;
+}
 void __vippro__()
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-
-    int i;
-    fr(i, 0, n) cin >> v[i];
-    sort(v.begin(), v.end());
-    ll ans = 0;
+    int n, i;
+    vector<pair<int, int>> v;
+    cin >> n >> x;
+    v.resize(n);
     fr(i, 0, n)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
+        cin >> v[i].first;
+        v[i].second = i;
     }
-    cout << ans << '\n';
+    sort(v.begin(), v.end(), cmp);
+    fr(i, 0, n) cout << v[i].first << ' ';
+    cout << '\n';
+    v.clear();
 }
 
 __ducsjukap__()

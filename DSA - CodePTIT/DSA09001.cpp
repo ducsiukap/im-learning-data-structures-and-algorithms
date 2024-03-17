@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <set>
 using namespace std;
 
 #define __ducsjukap__() int main()
@@ -17,20 +18,27 @@ typedef long double ld;
 
 void __vippro__()
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-
-    int i;
-    fr(i, 0, n) cin >> v[i];
-    sort(v.begin(), v.end());
-    ll ans = 0;
-    fr(i, 0, n)
+    int a, b, x, y, i;
+    cin >> x >> y;
+    vector<set<int>> v(x + 1);
+    fr(i, 0, y)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
+        cin >> a >> b;
+        v[a].insert(b);
+        v[b].insert(a);
     }
-    cout << ans << '\n';
+
+    fd(i, 0, x)
+    {
+        if (!v[i].empty())
+        {
+            cout << i << ':';
+            for (int e : v[i])
+                cout << ' ' << e;
+            cout << '\n';
+        }
+    }
+    cout << '\n';
 }
 
 __ducsjukap__()

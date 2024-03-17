@@ -17,20 +17,28 @@ typedef long double ld;
 
 void __vippro__()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, i, j, key;
+    cin >> n;
     vector<int> v(n);
+    vector<vector<int>> res;
 
-    int i;
     fr(i, 0, n) cin >> v[i];
-    sort(v.begin(), v.end());
-    ll ans = 0;
-    fr(i, 0, n)
+    fr(i, 0, n - 1)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
+        key = i;
+        fr(j, i + 1, n) if (v[j] < v[key])
+            key = j;
+        swap(v[i], v[key]);
+        res.push_back(v);
     }
-    cout << ans << '\n';
+    n = res.size();
+    while (--n >= 0)
+    {
+        cout << "Buoc " << n + 1 << ':';
+        for (int &x : res[n])
+            cout << ' ' << x;
+        cout << '\n';
+    }
 }
 
 __ducsjukap__()
@@ -39,8 +47,8 @@ __ducsjukap__()
     cin.tie(nullptr);
     cout.tie(nullptr);
     int T;
-    cin >> T;
-    dr(T, T, 0)
+    // cin >> T;
+    dr(T, 1, 0)
         __vippro__();
     return 0;
 }

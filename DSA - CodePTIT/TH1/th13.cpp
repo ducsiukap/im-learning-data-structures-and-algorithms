@@ -15,22 +15,33 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
+bool cmp(pair<int, int> &a, pair<int, int> &b)
+{
+    if (a.second == b.second)
+        return a.first < b.first;
+    return a.second > b.second;
+}
+
 void __vippro__()
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-
-    int i;
-    fr(i, 0, n) cin >> v[i];
-    sort(v.begin(), v.end());
-    ll ans = 0;
+    int n, i, x;
+    vector<int> v(100001, 0);
+    cin >> n;
     fr(i, 0, n)
     {
-        auto it = lower_bound(v.begin() + i + 1, v.end(), k + v[i]) - 1;
-        ans += it - v.begin() - i;
+        cin >> x;
+        ++v[x];
     }
-    cout << ans << '\n';
+    vector<pair<int, int>> res;
+    fr(i, 0, 100001) if (v[i]) res.push_back(make_pair(i, v[i]));
+    sort(res.begin(), res.end(), cmp);
+    for (pair<int, int> &p : res)
+        while (p.second)
+        {
+            cout << p.first << ' ';
+            --p.second;
+        }
+    cout << '\n';
 }
 
 __ducsjukap__()
