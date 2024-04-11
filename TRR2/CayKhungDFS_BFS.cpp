@@ -49,6 +49,7 @@ void Graph::DFS(queue<int> &q, int u)
         for (int t = 1; t <= n; ++t)
             if (A[v][t] && chuaxet[t])
             {
+
                 q.push(v);
                 q.push(t);
 

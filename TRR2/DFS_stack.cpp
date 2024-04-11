@@ -43,6 +43,7 @@ void Graph::init() { unused.resize(n + 1, true); }
 void Graph::DFS(int u)
 {
     stack<int> st;
+
     st.push(u);
     unused[u] = false;
     cout << "\nDuyet dinh : " << u;
@@ -56,10 +57,12 @@ void Graph::DFS(int u)
         {
             if (v[s][i] && unused[i])
             {
-                cout << "\nDuyet dinh : " << i;
                 st.push(s);
                 st.push(i);
+
                 unused[i] = false;
+                cout << "\nDuyet dinh : " << i;
+
                 break;
             }
         }
