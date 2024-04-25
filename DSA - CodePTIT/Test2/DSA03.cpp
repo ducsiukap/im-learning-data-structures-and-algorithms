@@ -32,65 +32,63 @@ typedef long double ld;
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
 #define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
+#define reset(x, n, value) fr(i, 0, n) x[i] = value
+
+struct item
 {
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
+    int cost, value;
+    float hs;
+};
+
+bool cmp(item a, item b)
+{
+    return a.hs >= b.hs;
+}
+
+int Maxcost = 1e9;
+
+int x[100005], n, maxVal;
+v(item) a(n);
+
+void Try(int i, int val)
+{
+    fr(j, 0, 2)
     {
-        if (x[i] == 'B')
+        x[i] = j;
+        val += j * a[i].value;
+        Maxcost -= j * a[i].cost;
+        if (Maxcost >= 0)
         {
-            maxX = max(cnt, maxX);
-            cnt = 0;
+            if (i == n - 1)
+                maxVal = max(maxVal, val);
+            else
+                Try(i + 1, val);
         }
-        else
-            ++cnt;
+        val -= j * a[i].value;
+        Maxcost += j * a[i].cost;
     }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
 }
 
-bool genNext()
-{
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
-    {
-        x[i] = 'A';
-        --i;
-    }
-
-    if (i)
-    {
-        x[i] = 'B';
-        return true;
-    }
-    return false;
-}
 void __vippro__()
 {
-    cin >> n >> k;
-    reset(x, n, 'A');
-
-    while (genNext())
-        ;
-
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
+    cin >> n;
+    a.resize(n);
+    fr(i, 0, n)
     {
-        out(a, n);
-        cout << '\n';
+        cin >> a[i].cost >> a[i].value;
+        a[i].hs = 1.0 * a[i].value / a[i].cost;
     }
+    sort(all(a), cmp);
+
+    Maxcost = 0;
+    Try(1, 0);
+    cout << maxVal << '\n';
 }
 
 __ducsjukap__
 {
-    faster();
+    // faster();
     // run()
     __vippro__();
     return 0;

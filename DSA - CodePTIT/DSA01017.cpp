@@ -32,67 +32,31 @@ typedef long double ld;
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
 #define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
-{
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
-    {
-        if (x[i] == 'B')
-        {
-            maxX = max(cnt, maxX);
-            cnt = 0;
-        }
-        else
-            ++cnt;
-    }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
-}
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
+#define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-bool genNext()
-{
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
-    {
-        x[i] = 'A';
-        --i;
-    }
-
-    if (i)
-    {
-        x[i] = 'B';
-        return true;
-    }
-    return false;
-}
 void __vippro__()
 {
-    cin >> n >> k;
-    reset(x, n, 'A');
+    string Bcode, Gcode;
+    cin >> Bcode;
 
-    while (genNext())
-        ;
-
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
+    Gcode = Bcode[0];
+    fr(i, 1, sz(Bcode))
     {
-        out(a, n);
-        cout << '\n';
+        if (Bcode[i] == Bcode[i - 1])
+            Gcode += '0';
+        else
+            Gcode += '1';
     }
+
+    cout << Gcode << '\n';
 }
 
 __ducsjukap__
 {
     faster();
-    // run()
-    __vippro__();
+    run()
+        __vippro__();
     return 0;
 }
 // * Code by Ducsjukapvippro

@@ -31,61 +31,59 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
-{
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
-    {
-        if (x[i] == 'B')
-        {
-            maxX = max(cnt, maxX);
-            cnt = 0;
-        }
-        else
-            ++cnt;
-    }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
-}
+#define in(x, n) fe(i, 1, n) cin >> x[i]
+#define out(x, n, sep) fe(i, 1, n) cout << x[i] << sep
+#define reset(x, n, val) fe(i, 1, n) x[i] = val
+int n, w;
+int a[100], c[100];
+bool x[100], xopt[100];
+int fopt;
 
 bool genNext()
 {
-    if (check())
-        v.push_back(x);
     int i = n;
-    while (i && x[i] == 'B')
+    while (i && x[i])
     {
-        x[i] = 'A';
+        x[i] = false;
         --i;
     }
 
     if (i)
     {
-        x[i] = 'B';
+        x[i] = true;
+        int maxVal = 0, maxCost = 0;
+        fe(j, 1, i) if (x[j])
+        {
+            maxVal += a[j];
+            maxCost += c[j];
+        }
+        if (maxVal > fopt && maxCost <= w)
+        {
+            fopt = maxVal;
+            fe(j, 1, n)
+                xopt[j] = x[j];
+        }
         return true;
     }
+
     return false;
 }
+
 void __vippro__()
 {
-    cin >> n >> k;
-    reset(x, n, 'A');
+    cin >> n >> w;
+    in(a, n);
+    in(c, n);
+    reset(x, n, false);
+    reset(xopt, n, false);
+    fopt = 0;
 
     while (genNext())
         ;
 
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
-    {
-        out(a, n);
-        cout << '\n';
-    }
+    cout << fopt << '\n';
+    out(xopt, n, ' ');
+    cout << '\n';
 }
 
 __ducsjukap__

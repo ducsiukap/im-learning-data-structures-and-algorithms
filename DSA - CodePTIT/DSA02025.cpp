@@ -31,61 +31,41 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
+#define in(x, n) fe(i, 1, n) cin >> x[i]
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
+#define reset(x, n, value) fr(i, 0, n) x[i] = value
+
+int n, ans;
+string vs[15];
+bool mark[26];
+
+int check(string &a, string &b)
 {
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
-    {
-        if (x[i] == 'B')
-        {
-            maxX = max(cnt, maxX);
-            cnt = 0;
-        }
-        else
-            ++cnt;
-    }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
+    reset(mark, 26, false);
+    int cnt = 0;
+    fr(i, 0, sz(a)) mark[a[i] - 'A'] = true;
+    fr(i, 0, sz(b)) cnt += mark[b[i] - 'A'];
+    return cnt;
 }
 
-bool genNext()
-{
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
-    {
-        x[i] = 'A';
-        --i;
-    }
-
-    if (i)
-    {
-        x[i] = 'B';
-        return true;
-    }
-    return false;
-}
 void __vippro__()
 {
-    cin >> n >> k;
-    reset(x, n, 'A');
+    cin >> n;
+    in(vs, n);
 
-    while (genNext())
-        ;
+    v(int) x(n);
+    fr(i, 0, n) x[i] = i + 1;
+    ans = 260;
 
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
+    int cnt;
+    do
     {
-        out(a, n);
-        cout << '\n';
-    }
+        cnt = 0;
+        fr(i, 0, n - 1) cnt += check(vs[x[i]], vs[x[i + 1]]);
+
+        ans = min(cnt, ans);
+    } while (next_permutation(all(x)));
+    cout << ans << '\n';
 }
 
 __ducsjukap__

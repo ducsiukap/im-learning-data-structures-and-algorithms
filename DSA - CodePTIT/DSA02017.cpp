@@ -31,68 +31,49 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
+#define in(x, n) fe(i, 1, n) cin >> x[i]
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
+#define reset(x, n, value) fr(i, 0, n) x[i] = value
+
+bool col[100], cross1[100], cross2[100];
+int a[100][100], bestValue;
+
+void Try(int i, int val)
 {
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
+    if (i == 9)
     {
-        if (x[i] == 'B')
+        bestValue = max(bestValue, val);
+        return;
+    }
+    fe(j, 1, 8)
+    {
+        if (col[j] && cross1[i - j + 8] && cross2[j + i])
         {
-            maxX = max(cnt, maxX);
-            cnt = 0;
+            col[j] = cross1[i - j + 8] = cross2[i + j] = false;
+            Try(i + 1, val + a[i][j]);
+            col[j] = cross1[i - j + 8] = cross2[i + j] = true;
         }
-        else
-            ++cnt;
     }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
 }
 
-bool genNext()
-{
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
-    {
-        x[i] = 'A';
-        --i;
-    }
-
-    if (i)
-    {
-        x[i] = 'B';
-        return true;
-    }
-    return false;
-}
 void __vippro__()
 {
-    cin >> n >> k;
-    reset(x, n, 'A');
+    fe(j, 1, 8) in(a[j], 8);
 
-    while (genNext())
-        ;
+    reset(col, 100, true);
+    reset(cross1, 100, true);
+    reset(cross2, 100, true);
+    bestValue = 0;
 
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
-    {
-        out(a, n);
-        cout << '\n';
-    }
+    Try(1, 0);
+    cout << bestValue << '\n';
 }
 
 __ducsjukap__
 {
     faster();
-    // run()
-    __vippro__();
+    run()
+        __vippro__();
     return 0;
 }
 // * Code by Ducsjukapvippro

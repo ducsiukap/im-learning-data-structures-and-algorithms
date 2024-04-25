@@ -32,58 +32,50 @@ typedef long double ld;
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
 #define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
-#define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
+#define reset(x, n, value) fr(i, 0, n) x[i] = value
+
+int A[25], n, k;
+v(int) x;
+v(v(int)) res;
+
+void Try(int i)
 {
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
+    fr(j, i, n)
     {
-        if (x[i] == 'B')
-        {
-            maxX = max(cnt, maxX);
-            cnt = 0;
-        }
-        else
-            ++cnt;
+        x.push_back(A[j]);
+        k -= A[j];
+
+        if (k == 0)
+            res.push_back(x);
+        else if (k - A[j] >= 0)
+            Try(j);
+
+        k += A[j];
+        x.pop_back();
     }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
 }
 
-bool genNext()
-{
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
-    {
-        x[i] = 'A';
-        --i;
-    }
-
-    if (i)
-    {
-        x[i] = 'B';
-        return true;
-    }
-    return false;
-}
 void __vippro__()
 {
     cin >> n >> k;
-    reset(x, n, 'A');
+    in(A, n);
+    sort(A, A + n);
 
-    while (genNext())
-        ;
+    x.clear();
+    res.clear();
+    Try(0);
 
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
+    if (sz(res) == 0)
+        cout << "-1\n";
+    else
     {
-        out(a, n);
+        for (v(int) v : res)
+        {
+            cout << '[';
+            fr(i, 0, sz(v) - 1) cout << v[i] << ' ';
+            cout << v[sz(v) - 1] << ']';
+        }
         cout << '\n';
     }
 }
@@ -91,8 +83,8 @@ void __vippro__()
 __ducsjukap__
 {
     faster();
-    // run()
-    __vippro__();
+    run()
+        __vippro__();
     return 0;
 }
 // * Code by Ducsjukapvippro

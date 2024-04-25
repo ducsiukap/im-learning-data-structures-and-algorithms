@@ -31,68 +31,49 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n) fe(i, 1, n) cout << x[i]
+#define in(x, n) fe(i, 1, n) cin >> x[i]
+#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fe(i, 1, n) x[i] = value
-int n, k, ans;
-vector<char> x(100);
-vector<vector<char>> v;
-bool check()
-{
-    int maxX = 0, cnt = 0;
-    fe(i, 1, n)
-    {
-        if (x[i] == 'B')
-        {
-            maxX = max(cnt, maxX);
-            cnt = 0;
-        }
-        else
-            ++cnt;
-    }
-    maxX = max(cnt, maxX);
-    return (maxX == k);
-}
 
-bool genNext()
+int n, k;
+bool used[50];
+int x[50];
+int ans;
+
+void check()
 {
-    if (check())
-        v.push_back(x);
-    int i = n;
-    while (i && x[i] == 'B')
+    int i = k;
+    while (i && x[i] == n - k + i)
     {
-        x[i] = 'A';
+        used[x[i]] = true;
         --i;
     }
-
     if (i)
     {
-        x[i] = 'B';
-        return true;
+        ans = 0;
+        ++x[i];
+        fe(j, i + 1, k)
+            x[j] = x[j - 1] + 1;
+        fe(j, i, k) if (!used[x[j]])++ ans;
     }
-    return false;
+    else
+        ans = k;
 }
+
 void __vippro__()
 {
     cin >> n >> k;
-    reset(x, n, 'A');
-
-    while (genNext())
-        ;
-
-    cout << v.size() << '\n';
-    for (vector<char> a : v)
-    {
-        out(a, n);
-        cout << '\n';
-    }
+    in(x, k);
+    reset(used, n, false);
+    check();
+    cout << ans << '\n';
 }
 
 __ducsjukap__
 {
     faster();
-    // run()
-    __vippro__();
+    run()
+        __vippro__();
     return 0;
 }
 // * Code by Ducsjukapvippro
