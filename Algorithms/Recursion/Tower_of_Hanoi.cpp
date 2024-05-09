@@ -35,22 +35,27 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-int MOD = 1e9 + 7;
+void Tower_of_Hanoi(int number_of_disk, char st, char en, char mid)
+{
+    if (number_of_disk == 1)
+        cout << "mover disk from tower " << st << " to tower " << en << '\n ';
+    else
+    {
+        Tower_of_Hanoi(number_of_disk - 1, st, mid, en);
+        cout << "mover disk from tower " << st << " to tower " << en << '\n';
+        Tower_of_Hanoi(number_of_disk - 1, mid, en, st);
+    }
+}
+
 void __vippro__()
 {
-    int n;
-    cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
+    int number_of_disk;
+    cout << "Number of disk : ";
+    cin >> number_of_disk;
 
-    fe(i, 0, n) dp[i][0] = 1;
-
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    cout << "\n__________________\n";
+    Tower_of_Hanoi(number_of_disk, 'A', 'C', 'B');
+    cout << "__________________\n";
 }
 
 __ducsjukap__

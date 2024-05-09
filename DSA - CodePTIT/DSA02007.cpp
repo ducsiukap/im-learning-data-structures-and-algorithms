@@ -36,11 +36,17 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
+int n;
+string s;
+
+void Try(int i)
+{
+}
+
 void __vippro__()
 {
-    int n;
-    string s;
     cin >> n >> s;
+    sort(all(s));
 }
 
 __ducsjukap__

@@ -1,3 +1,5 @@
+// Subarray with 0 sum using prefix sum
+
 // * Code by Ducsjukapvippro
 // * dont cry bae =))
 // * neu ngay mai khong den thi sao?
@@ -6,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -21,7 +24,7 @@ typedef long double ld;
     int T;    \
     cin >> T; \
     while (T--)
-#define v(x) vector<x>
+#define vt(x) vector<x>
 #define all(x) x.begin(), x.end()
 #define sz(x) x.size()
 #define fi first
@@ -34,23 +37,29 @@ typedef long double ld;
 #define in(x, n) fr(i, 0, n) cin >> x[i]
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
+bool have_subarray(vt(int) & v, int n)
+{
+    int sum = 0;
+    unordered_set<int> mp;
+    fr(i, 0, n)
+    {
+        sum += v[i];
 
-int MOD = 1e9 + 7;
+        if (sum == 0 || mp.find(sum) != mp.end())
+            return true;
+
+        mp.insert(sum);
+    }
+    return false;
+}
 void __vippro__()
 {
     int n;
     cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
+    vt(int) v(n);
+    in(v, n);
 
-    fe(i, 0, n) dp[i][0] = 1;
-
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    cout << boolalpha << have_subarray(v, n) << '\n';
 }
 
 __ducsjukap__

@@ -1,3 +1,5 @@
+// Balance index using prefix sum and array sum
+
 // * Code by Ducsjukapvippro
 // * dont cry bae =))
 // * neu ngay mai khong den thi sao?
@@ -35,22 +37,50 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-int MOD = 1e9 + 7;
+int balance_index_PS(v(int) v, int n) // O(n)
+{
+    v(int) left(n, 0), right(n, 0);
+    left[0] = v[0];
+    right[n - 1] = v[n - 1];
+
+    fr(i, 1, n)
+    {
+        left[i] = left[i - 1] + v[i];
+        right[n - i - 1] = right[n - i] + v[n - i - 1];
+    }
+
+    fr(i, 0, n) if (left[i] == right[i]) return i;
+    return -1;
+}
+
+int balance_index_ArraySum(v(int) v, int n) // O(n)
+{
+    int total_sum, left_sum;
+    total_sum = left_sum = 0;
+
+    fr(i, 0, n) total_sum += v[i];
+    fr(i, 0, n)
+    {
+        total_sum -= v[i];
+
+        if (total_sum == left_sum)
+            return i;
+
+        left_sum += v[i];
+    }
+
+    return -1;
+}
+
 void __vippro__()
 {
     int n;
     cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
+    v(int) a(n);
+    in(a, n);
 
-    fe(i, 0, n) dp[i][0] = 1;
-
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    cout << balance_index_PS(a, n) << '\n';
+    cout << balance_index_ArraySum(a, n) << '\n';
 }
 
 __ducsjukap__

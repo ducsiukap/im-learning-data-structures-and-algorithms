@@ -1,6 +1,8 @@
-// * Code by Ducsjukapvippro
-// * dont cry bae =))
-// * neu ngay mai khong den thi sao?
+// Find the value of a number raised to its reverse
+
+//  * Code by Ducsjukapvippro
+//  * dont cry bae =))
+//  * neu ngay mai khong den thi sao?
 
 #include <iostream>
 #include <string>
@@ -35,27 +37,45 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-int MOD = 1e9 + 7;
+#define MOD int(1e9 + 7)
+
+ll PowerOfNumber(int Number, int power)
+{
+    if (Number == 0 || Number == 1) // 0^x = 0, 1^x = 1
+        return Number;
+
+    if (power == 1) // base case
+        return Number;
+
+    return (Number * PowerOfNumber(Number, power - 1)) % MOD;
+}
+
+int Reverse(int Number)
+{
+    int rev = 0;
+    while (Number)
+    {
+        rev = rev * 10 + Number % 10;
+        Number /= 10;
+    }
+    return rev;
+}
 void __vippro__()
 {
-    int n;
-    cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
+    int number, power;
+    cout << "Enter number : ";
+    cin >> number;
 
-    fe(i, 0, n) dp[i][0] = 1;
+    power = Reverse(number);
 
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    cout << "\n------------------\n";
+    cout << "pow(" << number << ", " << power << ") = " << PowerOfNumber(number, power) << '\n';
+    cout << "------------------\n";
 }
 
 __ducsjukap__
 {
-    faster();
+    // faster();
     run()
         __vippro__();
     return 0;

@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -35,22 +36,48 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-int MOD = 1e9 + 7;
+void rewrite(string &s)
+{
+    stack<char> st1, st2;
+    for (char &c : s)
+    {
+        if (isalpha(c))
+            st1.push(c);
+        else if (c == ')')
+            st2.pop();
+        else if (c == '(')
+            st2.push(st1.top());
+        else
+        {
+            if (!st2.empty() && st2.top() == '-')
+            {
+                if (c == '-')
+                    c = '+';
+                else if (c == '+')
+                    c = '-';
+            }
+            st1.push(c);
+        }
+    }
+
+    s = "";
+    while (!st1.empty())
+    {
+        s = st1.top() + s;
+        st1.pop();
+    }
+}
+
 void __vippro__()
 {
-    int n;
-    cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
-
-    fe(i, 0, n) dp[i][0] = 1;
-
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    string s1, s2;
+    cin >> s1 >> s2;
+    rewrite(s1);
+    rewrite(s2);
+    if (s1 == s2)
+        cout << "YES\n";
+    else
+        cout << "NO\n";
 }
 
 __ducsjukap__

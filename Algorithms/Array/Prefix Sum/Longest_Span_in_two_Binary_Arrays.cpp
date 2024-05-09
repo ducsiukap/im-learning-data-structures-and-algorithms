@@ -1,3 +1,6 @@
+// Longest Span in two Binary Arrays
+// sum(B1[i ... j]) == sum(B2[i ..... j])
+
 // * Code by Ducsjukapvippro
 // * dont cry bae =))
 // * neu ngay mai khong den thi sao?
@@ -35,22 +38,42 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-int MOD = 1e9 + 7;
+int longestCommonSum(v(int) b1, v(int) b2, int n)
+{
+    vector<int> diff(2 * n + 1, -1);
+    int diff_index, ans, sum1, sum2;
+    ans = sum1 = sum2 = 0;
+    fr(i, 0, n)
+    {
+        sum1 += b1[i];
+        sum2 += b2[i];
+        diff_index = sum1 - sum2 + n;
+
+        if (diff_index == n)
+            ans = i + 1;
+        else if (diff[diff_index] != -1)
+        {
+            int distance = i - diff[diff_index];
+
+            ans = max(ans, distance);
+        }
+
+        else
+            diff[diff_index] = i;
+    }
+    return ans;
+}
+
 void __vippro__()
 {
     int n;
     cin >> n;
-    v(v(ll)) dp(n + 1, v(ll)(10, 1));
 
-    fe(i, 0, n) dp[i][0] = 1;
+    v(int) b1(n), b2(n);
+    in(b1, n);
+    in(b2, n);
 
-    // dp[i][j] là số các số thỏa mãn có độ dài là i, không giảm và kết thúc = j
-    fe(i, 1, n)
-    {
-        fe(j, 1, 9)
-            dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % (MOD);
-    }
-    fe(i, 1, n) cout << dp[i][9] << '\t';
+    cout << longestCommonSum(b1, b2, n) << '\n';
 }
 
 __ducsjukap__

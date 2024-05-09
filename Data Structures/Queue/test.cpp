@@ -1,78 +1,59 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <fstream>
-#include <chrono>
-#include <iomanip>
-
 using namespace std;
 
-ifstream ftest("test5.txt");
-
-void init(vector<long long> &v, int &n)
+struct Node
 {
-	ftest >> n;
-	v.resize(n);
-	for (int i = 0; i < n; ++i)
-		ftest >> v[i];
-	sort(v.begin(), v.end());
+    int data;
+    Node *left, *right;
+
+    Node(int val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+typedef Node *node;
+
+node insert(node root, int data)
+{
+    if (root == nullptr)
+        return new Node(data);
+
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else
+        root->right = insert(root->right, data);
+
+    return root;
 }
 
-bool search_func(vector<long long> v, int st, int en, long long x) // ternary_search
+void traversal(node root)
 {
-	int f1, f2, f3, mid;
-	int v_size = en - st;
-
-	f1 = 0;
-	f2 = f3 = 1;
-	while (f3 + f2 <= v_size)
-	{
-		f1 = f2;
-		f2 = f3;
-		f3 = f1 + f2;
-	}
-
-	while (st <= en && f3 >= 0)
-	{
-		mid = st + f3;
-
-		if (v[mid] == x)
-			return true;
-		if (v[mid] < x)
-			st = mid + 1;
-		else
-			en = mid - 1;
-		v_size = en - st;
-
-		while (f3 > v_size)
-		{
-			f3 = f2;
-			f2 = f1;
-			f1 = f3 - f2;
-		}
-	}
-	return false;
+    if (root == nullptr)
+        return;
+    cout << root->data << ' ';
+    traversal(root->left);
+    traversal(root->right);
 }
 
+void left_rotate(node &root)
+{
+    if (root == nullptr || root->right == nullptr)
+        return;
+    node newroot = root->right;
+    root->right = newroot->left;
+    newroot->left = root;
+
+    root = newroot;
+}
 int main()
 {
-	int T;
-	ftest >> T;
-	while (T--)
-	{
-		int n;
-		vector<long long> v;
-		init(v, n);
-		long long target;
-		clock_t st = clock();
-		for (int i = 0; i < 10; ++i)
-		{
-			ftest >> target;
-			cout << search_func(v, 0, n - 1, target);
-		}
-		clock_t en = clock();
-		cout << '\n'
-			 << en - st << '\n';
-	}
-	system("pause");
+    node root = nullptr;
+
+    root = insert(root, 40);
+    root = insert(root, 30);
+    root = insert(root, 60);
+    root = insert(root, 20);
+    traversal(root);
+    cout << '\n';
+    left_rotate(root);
+    traversal(root);
+    return 0;
 }
