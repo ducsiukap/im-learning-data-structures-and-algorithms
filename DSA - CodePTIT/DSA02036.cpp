@@ -21,7 +21,7 @@ typedef long double ld;
     int T;    \
     cin >> T; \
     while (T--)
-#define v(x) vector<x>
+#define vt(x) vector<x>
 #define all(x) x.begin(), x.end()
 #define sz(x) x.size()
 #define fi first
@@ -31,68 +31,69 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
-#define reset(x, n, value) fr(i, 0, n) x[i] = value
+#define in(x, n) fr(itr, 0, n) cin >> x[itr]
+#define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
+#define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-int a[20], n;
-int x[20];
-
-bool genNext()
+bool genNext(vt(int) & x, int n)
 {
-    int i = n - 1;
-    while (i >= 0 && x[i])
+    int i = 0;
+    while ((i < n) && (x[i]))
     {
         x[i] = 0;
-        --i;
+        ++i;
     }
-    if (i >= 0)
-    {
-        x[i] = 1;
-        return 1;
-    }
-    return 0;
+
+    if (i == n)
+        return false;
+
+    x[i] = 1;
+    return true;
 }
+
 void __vippro__()
 {
+    int n;
     cin >> n;
-    in(a, n);
-    sort(a, a + n, greater<int>());
-    reset(x, n, 0);
 
-    v(int) v;
-    v(v(int)) res;
-    int sum;
+    vt(int) v(n);
 
-    while (genNext())
+    for (int &i : v)
+        cin >> i;
+
+    sort(all(v));
+    vt(int) x(n, 0);
+
+    vt(vt(int)) res;
+
+    while (genNext(x, n))
     {
-        v.clear();
-        sum = 0;
+        int sum = 0;
         fr(i, 0, n)
-        {
-            if (x[i])
-            {
-                sum += a[i];
-                v.push_back(a[i]);
-            }
-        }
+            sum += x[i] * v[i];
+
         if (sum & 1)
-            res.push_back(v);
+        {
+            vt(int) tmp;
+            de(i, n - 1, 0) if (x[i]) tmp.pb(v[i]);
+
+            res.pb(tmp);
+        }
     }
 
-    fr(i, 0, sz(res))
+    for (vt(int) & a : res)
     {
-        out(res[i], sz(res[i]), ' ');
+        for (int &b : a)
+            cout << b << ' ';
         cout << '\n';
     }
 }
 
 __ducsjukap__
 {
-    // faster();
+    faster();
     run()
         __vippro__();
-    system("pause");
     return 0;
 }
 // * Code by Ducsjukapvippro

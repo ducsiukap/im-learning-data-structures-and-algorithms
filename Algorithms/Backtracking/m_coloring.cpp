@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <math.h>
 
 using namespace std;
 
@@ -36,46 +35,58 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool checkPoint(vt(int) & row, int &i)
+bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
 {
-    fr(j, 0, i)
-    {
-        if ((row[j] == row[i]) || (abs(i - j) == abs(row[i] - row[j])))
+    for (int &t : ke)
+        if (vertex_color[t] == color)
             return false;
-    }
 
     return true;
 }
 
-int ans;
-
-void Try(vt(int) & row, int &n, int i)
+bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
 {
-    if (i == n)
+    fe(j, 1, m)
     {
-        ++ans;
-        return;
+        if (check_coloring(vertex_color, ke[i], j))
+        {
+            vertex_color[i] = j;
+
+            if (i == n)
+                return true;
+            else if (Try(vertex_color, ke, n, m, i + 1) == true)
+                return true;
+
+            vertex_color[i] = 0;
+        }
     }
 
-    fr(j, 0, n)
-    {
-        row.push_back(j);
-        if (checkPoint(row, i))
-            Try(row, n, i + 1);
-        row.pop_back();
-    }
+    return false;
 }
 
 void __vippro__()
 {
-    int n;
-    cin >> n;
+    int n, ne, m;
+    cin >> n >> ne >> m;
 
-    vt(int) row;
-    ans = 0;
+    vt(vt(int)) ke(n + 1);
 
-    Try(row, n, 0);
-    cout << ans << '\n';
+    fr(i, 0, ne)
+    {
+        int u, v;
+        cin >> u >> v;
+        ke[u].pb(v);
+        ke[v].pb(u);
+    }
+
+    vt(int) vertex_color(n + 1, 0);
+    if (Try(vertex_color, ke, n, m, 1))
+        cout << "YES";
+    else
+        cout << "NO";
+    for (int &color : vertex_color)
+        cout << ' ' << color;
+    cout << '\n';
 }
 
 __ducsjukap__

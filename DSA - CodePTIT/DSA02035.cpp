@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <math.h>
 
 using namespace std;
 
@@ -36,53 +35,57 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool checkPoint(vt(int) & row, int &i)
+int to_int(string &s, vt(int) & x, int &k)
 {
-    fr(j, 0, i)
-    {
-        if ((row[j] == row[i]) || (abs(i - j) == abs(row[i] - row[j])))
-            return false;
-    }
-
-    return true;
+    int num = 0;
+    fr(i, 0, k)
+        num = num * 10 + s[x[i]] - '0';
+    return num;
 }
 
-int ans;
-
-void Try(vt(int) & row, int &n, int i)
+int get_distance(vt(string) & v, vt(int) & x, int &n, int &k)
 {
-    if (i == n)
+    int m = to_int(v[0], x, k);
+    int M = to_int(v[0], x, k);
+
+    fr(i, 1, n)
     {
-        ++ans;
-        return;
+        int num = to_int(v[i], x, k);
+
+        if (num < m)
+            m = num;
+        if (num > M)
+            M = num;
     }
 
-    fr(j, 0, n)
-    {
-        row.push_back(j);
-        if (checkPoint(row, i))
-            Try(row, n, i + 1);
-        row.pop_back();
-    }
+    return (M - m);
 }
 
 void __vippro__()
 {
-    int n;
-    cin >> n;
+    int n, k;
+    cin >> n >> k;
+    vt(string) v(n);
 
-    vt(int) row;
-    ans = 0;
+    for (string &s : v)
+        cin >> s;
 
-    Try(row, n, 0);
+    vt(int) x(k);
+    fr(i, 0, k) x[i] = i;
+
+    int ans = get_distance(v, x, n, k);
+
+    while (next_permutation(all(x)))
+        ans = min(ans, get_distance(v, x, n, k));
+
     cout << ans << '\n';
 }
 
 __ducsjukap__
 {
     faster();
-    run()
-        __vippro__();
+    // run()
+    __vippro__();
     return 0;
 }
 // * Code by Ducsjukapvippro
