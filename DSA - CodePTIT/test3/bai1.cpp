@@ -6,6 +6,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <stack>
+#include <set>
 
 using namespace std;
 
@@ -35,38 +37,43 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
-{
-    if (k == 0)
-        return;
-
-    int j = i;
-
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
-    {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
-    }
-}
 void __vippro__()
 {
     string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    stack<int> st;
+    set<int> errr;
+    cin >> s;
+    fr(i, 0, sz(s))
+    {
+        if (s[i] == '(')
+            st.push(i);
+        else if (s[i] == ')')
+        {
+            if (st.empty())
+                errr.insert(i);
+            else
+            {
+                s[i] = '1';
+                s[st.top()] = '0';
+                st.pop();
+            }
+        }
+    }
+
+    while (!st.empty())
+    {
+        errr.insert(st.top());
+        st.pop();
+    }
+
+    fr(i, 0, sz(s))
+    {
+        if (errr.find(i) != errr.end())
+            cout << -1;
+        else
+            cout << s[i];
+    }
+    cout << '\n';
 }
 
 __ducsjukap__

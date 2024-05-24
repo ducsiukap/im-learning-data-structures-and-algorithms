@@ -36,46 +36,56 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-void rebuilt_expression(string &Exp)
+bool dfs(vt(vt(int)) & v, int &n)
 {
-    stack<char> str, opr;
-    Exp = '+' + Exp;
-    str.push('+');
-
-    for (char &c : Exp)
+    vt(bool) check(n + 1, false);
+    stack<int> st;
+    st.push(1);
+    check[1] = true;
+    while (!st.empty())
     {
-        if (isalpha(c))
-            str.push(c);
-        else if (c == '+' || c == '-')
+        int s = st.top();
+        st.pop();
+        fe(i, 1, n) if (v[s][i] && !check[i])
         {
-            if (opr.empty() || opr.top() == '+')
-                str.push(c);
-            else
-                str.push((c == '+' ? '-' : '+'));
+            st.push(s);
+            st.push(i);
+            check[i] = true;
+            break;
         }
-        else if (c == '(')
-            opr.push(str.top());
-        else
-            opr.pop();
     }
 
-    Exp = "";
-    while (str.size() != 2)
-    {
-        Exp = str.top() + Exp;
-        str.pop();
-    }
+    fe(i, 1, n) if (!check[i]) return true;
+    return false;
 }
 
 void __vippro__()
 {
-    string s1, s2;
-    cin >> s1 >> s2;
+    int n, e;
+    cin >> n >> e;
 
-    rebuilt_expression(s1);
-    rebuilt_expression(s2);
-    // cout << s1 << ' ' << s2 << '\n';
-    cout << (s1 == s2 ? "YES\n" : "NO\n");
+    vt(vt(int)) v(n + 1, vt(int)(n + 1, 0));
+    vector<pair<int, int>> vp(e);
+
+    for (pair<int, int> &p : vp)
+    {
+        cin >> p.fi >> p.se;
+        v[p.fi][p.se] = v[p.se][p.fi] = 1;
+    }
+
+    vector<pair<int, int>> ans;
+    fr(i, 0, e)
+    {
+        v[vp[i].fi][vp[i].se] = v[vp[i].se][vp[i].fi] = 0;
+        if (dfs(v, n))
+            ans.push_back(vp[i]);
+        v[vp[i].fi][vp[i].se] = v[vp[i].se][vp[i].fi] = 1;
+    }
+
+    sort(all(ans));
+    for (pair<int, int> &p : ans)
+        cout << p.fi << ' ' << p.se << ' ';
+    cout << '\n';
 }
 
 __ducsjukap__

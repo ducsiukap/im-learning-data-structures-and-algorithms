@@ -6,7 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -36,46 +36,67 @@ typedef long double ld;
 #define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
 #define reset(x, n, value) fr(i, 0, n) x[i] = value
 
-void rebuilt_expression(string &Exp)
+struct Node
 {
-    stack<char> str, opr;
-    Exp = '+' + Exp;
-    str.push('+');
+    int data;
+    Node *l, *r;
+    Node(int &info) : data(info), l(nullptr), r(nullptr) {}
+};
 
-    for (char &c : Exp)
-    {
-        if (isalpha(c))
-            str.push(c);
-        else if (c == '+' || c == '-')
-        {
-            if (opr.empty() || opr.top() == '+')
-                str.push(c);
-            else
-                str.push((c == '+' ? '-' : '+'));
-        }
-        else if (c == '(')
-            opr.push(str.top());
-        else
-            opr.pop();
-    }
+typedef Node *node;
 
-    Exp = "";
-    while (str.size() != 2)
+void expand_tree(vt(node) & tree, int &u, int &v, char &c)
+{
+    int pos = -1;
+    fr(i, 0, tree.size()) if (tree[i]->data == u)
     {
-        Exp = str.top() + Exp;
-        str.pop();
+        pos = i;
+        break;
     }
+    if (pos == -1)
+        return;
+    node newNode = new Node(v);
+    if (c == 'L')
+        tree[pos]->l = newNode;
+    else
+        tree[pos]->r = newNode;
+    tree.push_back(newNode);
 }
 
+void level_traversal(node root)
+{
+    queue<node> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        node x = q.front();
+        q.pop();
+        cout << x->data << ' ';
+        if (x->l)
+            q.push(x->l);
+        if (x->r)
+            q.push(x->r);
+    }
+    cout << '\n';
+}
 void __vippro__()
 {
-    string s1, s2;
-    cin >> s1 >> s2;
+    int n, a, b;
+    char c;
+    cin >> n >> a >> b >> c;
+    node root = new Node(a);
 
-    rebuilt_expression(s1);
-    rebuilt_expression(s2);
-    // cout << s1 << ' ' << s2 << '\n';
-    cout << (s1 == s2 ? "YES\n" : "NO\n");
+    // build tree
+    vt(node) tree;
+    tree.push_back(root);
+    expand_tree(tree, a, b, c);
+    fr(i, 1, n)
+    {
+        cin >> a >> b >> c;
+        expand_tree(tree, a, b, c);
+    }
+
+    level_traversal(root);
 }
 
 __ducsjukap__

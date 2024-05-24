@@ -188,7 +188,7 @@ public:
 
         --Size; // decrease the size of tree
         // if found
-        // if deleted_node is parent of a leaves or a leaves (*)
+        // if deleted_node is parent of a leaves or is a leaves (*)
         if (deleted_node->left == nullptr)
             deleted_node = deleted_node->right;
         else if (deleted_node->right == nullptr)

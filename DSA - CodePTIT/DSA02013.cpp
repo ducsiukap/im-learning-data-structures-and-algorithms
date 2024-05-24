@@ -35,43 +35,74 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+vt(int) P;
+int n;
+
+void inittt()
 {
-    if (k == 0)
-        return;
+    vt(bool) v(201, true);
 
-    int j = i;
-
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
+    fe(i, 2, 14)
     {
-        if (s[x] == s[j])
+        if (v[j])
+            for (int j = i * i; j <= 200; j += i)
+                v[j] = 0;
+    }
+
+    fr(i, 2, 200) if (v[i]) P.push_back(i);
+    n = sz(P);
+}
+
+vt(vt(int)) res;
+
+void Try(vt(int) & ans, int i, int &en, int &n1, int &s, int sum)
+{
+    fr(j, ans[i - 1] + 1, en - i + 1)
+    {
+        ans[i] = j;
+        sum += P[j];
+
+        if (i == n1)
         {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
+            if (sum == s)
+                res.push_back(ans);
         }
+        else if (i < n1 && sum < s)
+            Try(ans, i + 1, en, n1, s, sum);
+        sum -= P[j];
     }
 }
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n1, p, s;
+    cin >> n1 >> p >> s;
+
+    if (p > s)
+    {
+        cout << 0 << '\n';
+        return;
+    }
+
+    int en = 0;
+    while (en < n && v[en] < p)
+        ++en;
+
+    vt(int) ans;
+    ans.push_back(en - 1);
+
+    while (en < n && v[en] <= s)
+        ++en;
+
+    --en;
+    Try(ans, 1, en, n1, s, 0);
+    cout << sz(res) << '\n';
 }
 
 __ducsjukap__
 {
     faster();
+    inittt();
     run()
         __vippro__();
     return 0;

@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -35,38 +36,33 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
-{
-    if (k == 0)
-        return;
-
-    int j = i;
-
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
-    {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
-    }
-}
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n;
+    cin >> n;
+
+    queue<string> q;
+    vt(string) res;
+
+    q.push("6");
+    q.push("8");
+    while (!q.empty())
+    {
+        string s = q.front();
+        q.pop();
+
+        res.push_back(s);
+        if (sz(s) < n)
+        {
+            q.push(s + '6');
+            q.push(s + '8');
+        }
+    }
+
+    cout << sz(res) << '\n';
+    for (string &s : res)
+        cout << s << ' ';
+    cout << '\n';
 }
 
 __ducsjukap__

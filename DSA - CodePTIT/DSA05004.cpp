@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <sstream>
 
 using namespace std;
 
@@ -15,13 +14,13 @@ typedef long double ld;
 
 #define __ducsjukap__ int main()
 #define faster()                      \
-	ios_base::sync_with_stdio(false); \
-	cin.tie(NULL);                    \
-	cout.tie(NULL)
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
 #define run() \
-	int T;    \
-	cin >> T; \
-	while (T--)
+    int T;    \
+    cin >> T; \
+    while (T--)
 #define vt(x) vector<x>
 #define all(x) x.begin(), x.end()
 #define sz(x) x.size()
@@ -32,45 +31,35 @@ typedef long double ld;
 #define fe(i, a, b) for (int i = a; i <= b; ++i)
 #define dr(i, a, b) for (int i = a; i > b; --i)
 #define de(i, a, b) for (int i = a; i >= b; --i)
-#define in(x, n) fr(i, 0, n) cin >> x[i]
-#define out(x, n, sep) fr(i, 0, n) cout << x[i] << sep
-#define reset(x, n, value) fr(i, 0, n) x[i] = value
+#define in(x, n) fr(itr, 0, n) cin >> x[itr]
+#define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
+#define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
 void __vippro__()
 {
-	int n;
-	cin >> n;
-	cin.ignore();
+    int n;
+    cin >> n;
 
-	vector<vector<int>> v(n + 1);
+    vt(int) v(n), dp(n, 1);
 
-	string s;
-	int e;
-	fe(i, 1, n)
-	{
-		getline(cin, s);
-		stringstream ss(s);
-		while (ss >> s)
-		{
-			e = stoi(s);
-			if (e > i)
-				v[i].push_back(e);
-		}
-	}
+    for (int &i : v)
+        cin >> i;
 
-	fe(i, 1, n)
-	{
-		sort(all(v[i]));
-		for (int &x : v[i])
-			cout << i << ' ' << x << '\n';
-	}
+    int maxLen = 1;
+    fr(i, 1, n)
+    {
+        fr(j, 0, i) if (v[j] < v[i]) dp[i] = max(dp[i], dp[j] + 1);
+        maxLen = max(maxLen, dp[i]);
+    }
+
+    cout << maxLen << '\n';
 }
 
 __ducsjukap__
 {
-	faster();
-	// run()
-	__vippro__();
-	return 0;
+    faster();
+    // run()
+    __vippro__();
+    return 0;
 }
 // * Code by Ducsjukapvippro

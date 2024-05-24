@@ -6,6 +6,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -35,38 +37,70 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+vt(int) bfs(vt(vt(int)) & ke, int &n, int &u)
 {
-    if (k == 0)
-        return;
+    queue<int> st;
+    vt(bool) unused(n + 1, true);
+    vt(int) prev(n + 1, 0);
 
-    int j = i;
+    st.push(u);
+    prev[u] = u;
+    unused[u] = false;
 
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
+    while (!st.empty())
     {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
+        int s = st.front();
+        st.pop();
+
+        for (int &t : ke[s])
+            if (unused[t])
+            {
+                st.push(t);
+                unused[t] = false;
+                prev[t] = s;
+            }
     }
+
+    return prev;
 }
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n, ne, st, en;
+    cin >> n >> ne >> st >> en;
+
+    vt(vt(int)) ke(n + 1);
+
+    fr(i, 0, ne)
+    {
+        int u, v;
+        cin >> u >> v;
+        ke[u].pb(v);
+        ke[v].pb(u);
+    }
+
+    vt(int) prev = bfs(ke, n, st);
+
+    if (prev[en] == 0)
+        cout << -1;
+    else
+    {
+        stack<int> path;
+        while (en != st)
+        {
+            path.push(en);
+            en = prev[en];
+        }
+
+        cout << st;
+        while (!path.empty())
+        {
+            cout << ' ' << path.top();
+            path.pop();
+        }
+    }
+
+    cout << '\n';
 }
 
 __ducsjukap__

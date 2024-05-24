@@ -35,38 +35,42 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+int dx[] = {1, 1, 0, -1, -1, -1, 0, 1};
+int dy[] = {0, -1, -1, -1, 0, 1, 1, 1};
+int n, m;
+
+void dfs(vt(vt(char)) & v, int x, int y)
 {
-    if (k == 0)
+    if (x < 0 || x >= m || y < 0 || y >= n || v[y][x] != '1')
         return;
 
-    int j = i;
+    v[y][x] = '-';
 
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
-    {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
-    }
+    fr(i, 0, 8)
+        dfs(v, x + dx[i], y + dy[i]);
 }
+
+int count_island(vt(vt(char)) & v)
+{
+    int cnt = 0;
+    fr(i, 0, n) fr(j, 0, m) if (v[i][j] == '1')
+    {
+        ++cnt;
+        dfs(v, j, i);
+    }
+
+    return cnt;
+}
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    cin >> n >> m;
+
+    vt(vt(char)) v(n, vt(char)(m));
+
+    fr(i, 0, n) fr(j, 0, m) cin >> v[i][j];
+
+    cout << count_island(v) << '\n';
 }
 
 __ducsjukap__

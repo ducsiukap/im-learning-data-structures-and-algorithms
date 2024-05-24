@@ -6,7 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <sstream>
+#include <queue>
 
 using namespace std;
 
@@ -15,13 +15,13 @@ typedef long double ld;
 
 #define __ducsjukap__ int main()
 #define faster()                      \
-	ios_base::sync_with_stdio(false); \
-	cin.tie(NULL);                    \
-	cout.tie(NULL)
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
 #define run() \
-	int T;    \
-	cin >> T; \
-	while (T--)
+    int T;    \
+    cin >> T; \
+    while (T--)
 #define vt(x) vector<x>
 #define all(x) x.begin(), x.end()
 #define sz(x) x.size()
@@ -38,39 +38,41 @@ typedef long double ld;
 
 void __vippro__()
 {
-	int n;
-	cin >> n;
-	cin.ignore();
+    int k;
+    string s;
+    cin >> k >> s;
 
-	vector<vector<int>> v(n + 1);
+    vt(int) v(26, 0);
+    for (char &c : s)
+        ++v[c - 'A'];
 
-	string s;
-	int e;
-	fe(i, 1, n)
-	{
-		getline(cin, s);
-		stringstream ss(s);
-		while (ss >> s)
-		{
-			e = stoi(s);
-			if (e > i)
-				v[i].push_back(e);
-		}
-	}
-
-	fe(i, 1, n)
-	{
-		sort(all(v[i]));
-		for (int &x : v[i])
-			cout << i << ' ' << x << '\n';
-	}
+    priority_queue<int> pq;
+    fr(i, 0, 26) if (v[i]) pq.push(v[i]);
+    while (k && !pq.empty())
+    {
+        int top = pq.top();
+        pq.pop();
+        --top;
+        if (top)
+            pq.push(top);
+        --k;
+    }
+    ll res = 0;
+    while (!pq.empty())
+    {
+        ll top = pq.top();
+        pq.pop();
+        top *= top;
+        res += top;
+    }
+    cout << res << '\n';
 }
 
 __ducsjukap__
 {
-	faster();
-	// run()
-	__vippro__();
-	return 0;
+    faster();
+    run()
+        __vippro__();
+    return 0;
 }
 // * Code by Ducsjukapvippro

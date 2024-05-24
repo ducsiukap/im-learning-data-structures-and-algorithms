@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -35,38 +36,47 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+void dfs(vt(vt(int)) & ke, int &n, int &u)
 {
-    if (k == 0)
-        return;
+    vt(bool) unused(n + 1, true);
+    stack<int> st;
 
-    int j = i;
+    st.push(u);
+    cout << u;
+    unused[u] = false;
 
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
+    while (!st.empty())
     {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
+        int s = st.top();
+        st.pop();
+        for (int &t : ke[s])
+            if (unused[t])
+            {
+                st.push(s);
+                st.push(t);
+                cout << ' ' << t;
+                unused[t] = false;
+                break;
+            }
     }
+
+    cout << '\n';
 }
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n, ne, s;
+    cin >> n >> ne >> s;
+
+    vt(vt(int)) ke(n + 1);
+    fr(i, 0, ne)
+    {
+        int a, b;
+        cin >> a >> b;
+        ke[a].push_back(b);
+    }
+
+    dfs(ke, n, s);
 }
 
 __ducsjukap__

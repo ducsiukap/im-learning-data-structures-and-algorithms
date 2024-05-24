@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -35,38 +36,45 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+void bfs(vt(vt(int)) & ke, int &n, int &u)
 {
-    if (k == 0)
-        return;
+    vt(bool) unused(n + 1, true);
+    queue<int> q;
 
-    int j = i;
+    q.push(u);
+    unused[u] = false;
 
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
+    while (!q.empty())
     {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
+        int s = q.front();
+        q.pop();
+        cout << s << ' ';
+
+        for (int &t : ke[s])
+            if (unused[t])
+            {
+                q.push(t);
+                unused[t] = false;
+            }
     }
+
+    cout << '\n';
 }
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n, ne, s;
+    cin >> n >> ne >> s;
+
+    vt(vt(int)) ke(n + 1);
+    fr(i, 0, ne)
+    {
+        int a, b;
+        cin >> a >> b;
+        ke[a].push_back(b);
+    }
+
+    bfs(ke, n, s);
 }
 
 __ducsjukap__

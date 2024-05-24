@@ -35,38 +35,30 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-void rebuild_string(string &s, int &k, int i, string &res)
+int euler_condition(vt(vt(int)) & ke, int &n)
 {
-    if (k == 0)
-        return;
+    int odd = 0;
+    fe(i, 1, n)
+        odd += sz(ke[i]) % 2;
 
-    int j = i;
-
-    fr(x, i + 1, sz(s)) if (s[x] > s[j]) j = x;
-
-    if (s[j] != s[i])
-        --k;
-
-    de(x, sz(s) - 1, i)
-    {
-        if (s[x] == s[j])
-        {
-            swap(s[x], s[i]);
-            if (s > res)
-                res = s;
-            rebuild_string(s, k, i + 1, res);
-            swap(s[x], s[i]);
-        }
-    }
+    return (odd == 0 ? 2 : (odd == 2 ? 1 : 0));
 }
+
 void __vippro__()
 {
-    string s;
-    int k;
-    cin >> k >> s;
-    string res = s;
-    rebuild_string(s, k, 0, res);
-    cout << res << '\n';
+    int n, ne;
+    cin >> n >> ne;
+
+    vt(vt(int)) ke(n + 1);
+    fr(i, 0, ne)
+    {
+        int u, v;
+        cin >> u >> v;
+        ke[u].push_back(v);
+        ke[v].push_back(u);
+    }
+
+    cout << euler_condition(ke, n) << '\n';
 }
 
 __ducsjukap__
