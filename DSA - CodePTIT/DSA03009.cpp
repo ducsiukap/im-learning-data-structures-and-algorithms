@@ -35,57 +35,45 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
+struct work
 {
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
+    int id, deadline, profit;
+};
 
-    return true;
-}
-
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
-{
-    fe(j, 1, m)
-    {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
-
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
-
-            vertex_color[i] = 0;
-        }
-    }
-
-    return false;
-}
+bool cmp(work &a, work &b) { return a.profit > b.profit; }
 
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
+    int n;
+    cin >> n;
 
-    vt(vt(int)) ke(n + 1);
+    vt(work) works(n);
 
-    fr(i, 0, ne)
+    for (work &i : works)
+        cin >> i.id >> i.deadline >> i.profit;
+
+    sort(all(works), cmp);
+
+    vt(bool) slot(1000, false);
+    int w, p;
+    w = p = 0;
+
+    for (work &W : works)
     {
-        int u, v;
-        cin >> u >> v;
-        ke[u].pb(v);
-        ke[v].pb(u);
+        de(i, W.deadline - 1, 0)
+        {
+            if (slot[i] == false)
+            {
+                ++w;
+                p += W.profit;
+
+                slot[i] = true;
+                break;
+            }
+        }
     }
 
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
-
-    cout << '\n';
+    cout << w << ' ' << p << '\n';
 }
 
 __ducsjukap__

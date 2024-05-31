@@ -21,55 +21,26 @@ typedef long long ll;
 
 #define __ducsjukap__ int main()
 
-	
-
-bool dfs(vt(vt(int)) &ke, vt(bool) &unused, int &n, int u, int par)
+bool check(vt(int) &v, int n, int s)
 {
-	unused[u] = false;
+	vt(bool) dp(s + 1, false);
 	
-	for (int &v : ke[u])
-		if (unused[v])
-		{
-			if (dfs(ke, unused, n, v, u))
-				return true;
-		}
-		else if (v != par)
-			return true;
-	
-	return false;
- } 
-
-bool chutrinh(vt(vt(int)) &ke, int &n)
-{
-	vt(bool) unused(n + 1, true);
-	fe (i, 1, n)
-		if (unused[i])
-			if (dfs(ke, unused, n, i, 0))
-				return true;
-	return false;
+	dp[0] = true;
+	fr(i, 0, n)
+		de(j, s, v[i])
+			dp[j] = (dp[j] || dp[j - v[i]]);
+	return dp[s];
 }
 
 void vippro()
 {
-	int n, ne;
-	cin >> n >> ne;
+	int n, s;
+	cin >> n >> s;
+	 
+	vt(int) v(n);
+	in(v, n);
 	
-	vt(vt(int)) ke(n + 1);
-	
-	fr(i, 0, ne)
-	{
-		int u, v;
-		cin >> u >> v;
-		ke[u].push_back(v);
-		ke[v].push_back(u);
-	}
-	
-	if (chutrinh(ke, n))
-		cout << "YES";
-	else 
-		cout << "NO";
-	
-	cout << '\n';
+	cout << (check(v, n, s) ? "YES" : "NO") << '\n';
 }
 
 __ducsjukap__

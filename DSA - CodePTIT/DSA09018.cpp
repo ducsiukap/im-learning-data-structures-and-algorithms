@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -35,40 +36,46 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
+bool dfs(vt(vt(int)) & ke, int &n, int u, int i)
 {
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
+    stack<int> st;
+    st.push(u);
+    vt(bool) unused(n + 1, true);
+    unused[i] = unused[u] = false;
 
-    return true;
-}
-
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
-{
-    fe(j, 1, m)
+    while (!st.empty())
     {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
+        int v = st.top();
+        st.pop();
 
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
-
-            vertex_color[i] = 0;
-        }
+        for (int &t : ke[v])
+            if (unused[t])
+            {
+                st.push(v);
+                st.push(t);
+                unused[t] = false;
+                break;
+            }
     }
 
+    fe(i, 1, n) if (unused[i]) return true;
     return false;
+}
+
+void solve(vt(vt(int)) & ke, int &n)
+{
+    if (dfs(ke, n, 2, 1))
+        cout << 1 << ' ';
+    fe(i, 2, n) if (dfs(ke, n, 1, i))
+            cout
+        << i << ' ';
+    cout << '\n';
 }
 
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
-
+    int n, ne;
+    cin >> n >> ne;
     vt(vt(int)) ke(n + 1);
 
     fr(i, 0, ne)
@@ -79,13 +86,7 @@ void __vippro__()
         ke[v].pb(u);
     }
 
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
-
-    cout << '\n';
+    solve(ke, n);
 }
 
 __ducsjukap__

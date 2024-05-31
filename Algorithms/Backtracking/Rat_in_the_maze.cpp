@@ -2,6 +2,8 @@
 // * dont cry bae =))
 // * neu ngay mai khong den thi sao?
 
+// problem: https://www.geeksforgeeks.org/rat-in-a-maze/
+
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -35,56 +37,55 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
-{
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
+char direction[] = "RULD";
+int x[] = {1, 0, -1, 0};
+int y[] = {0, -1, 0, 1};
+int n; // sz of maze
 
-    return true;
-}
+vt(string) all_path;
 
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
+void Try(vt(vt(int)) & maze, int X, int Y, string path)
 {
-    fe(j, 1, m)
+    if (X < 0 || X >= n || Y < 0 || Y >= n || maze[Y][X] != 1)
+        return;
+
+    if (X == Y && Y == n - 1)
     {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
-
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
-
-            vertex_color[i] = 0;
-        }
+        all_path.push_back(path);
+        return;
     }
 
-    return false;
+    maze[Y][X] = 0;
+    fr(i, 0, 4)
+        Try(maze, X + x[i], Y + y[i], path + direction[i]);
+    maze[Y][X] = 1;
 }
 
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
+    cin >> n;
 
-    vt(vt(int)) ke(n + 1);
+    vt(vt(int)) maze(n, vt(int)(n));
 
-    fr(i, 0, ne)
+    for (vt(int) & v : maze)
+        for (int &i : v)
+            cin >> i;
+
+    if (maze[0][0] == 0 || maze[n - 1][n - 1] == 0 || (maze[n - 2][n - 1] == 0 && maze[n - 1][n - 2] == 0))
     {
-        int u, v;
-        cin >> u >> v;
-        ke[u].pb(v);
-        ke[v].pb(u);
+        cout << -1 << '\n';
+        return;
     }
 
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
+    all_path.clear();
+    Try(maze, 0, 0, "");
 
+    sort(all(all_path));
+
+    if (all_path.empty())
+        cout << -1;
+    else
+        out(all_path, sz(all_path), ' ');
     cout << '\n';
 }
 

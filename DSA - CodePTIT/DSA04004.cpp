@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -35,57 +36,23 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
+int solve(ll n, ll k)
 {
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
-
-    return true;
-}
-
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
-{
-    fe(j, 1, m)
-    {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
-
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
-
-            vertex_color[i] = 0;
-        }
-    }
-
-    return false;
+    ll a = 1;
+    a <<= (n - 1); // (2^n / 2) - vị trí mid, chỉ số tính từ 1
+    if (k == a)
+        return n;
+    else if (k < a)
+        return solve(n - 1, k);
+    else
+        return solve(n - 1, k - a);
 }
 
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
-
-    vt(vt(int)) ke(n + 1);
-
-    fr(i, 0, ne)
-    {
-        int u, v;
-        cin >> u >> v;
-        ke[u].pb(v);
-        ke[v].pb(u);
-    }
-
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
-
-    cout << '\n';
+    ll n, k;
+    cin >> n >> k;
+    cout << solve(n, k) << '\n';
 }
 
 __ducsjukap__

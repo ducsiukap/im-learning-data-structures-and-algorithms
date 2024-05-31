@@ -21,55 +21,31 @@ typedef long long ll;
 
 #define __ducsjukap__ int main()
 
-	
-
-bool dfs(vt(vt(int)) &ke, vt(bool) &unused, int &n, int u, int par)
+int miniumInsert(vt(int) &v, int &n)
 {
-	unused[u] = false;
+	vt(int) dp(n, 1);
 	
-	for (int &v : ke[u])
-		if (unused[v])
-		{
-			if (dfs(ke, unused, n, v, u))
-				return true;
-		}
-		else if (v != par)
-			return true;
+	fr (i, 1, n)
+		fr (j, 0, i)
+			if (v[i] > v[j])
+				dp[i] = max(dp[i], dp[j] + 1);
 	
-	return false;
- } 
-
-bool chutrinh(vt(vt(int)) &ke, int &n)
-{
-	vt(bool) unused(n + 1, true);
-	fe (i, 1, n)
-		if (unused[i])
-			if (dfs(ke, unused, n, i, 0))
-				return true;
-	return false;
+	int maxList = 1;
+	fr (i, 1, n)
+		maxList = max(maxList, dp[i]);
+		
+	return n - maxList;
 }
 
 void vippro()
 {
-	int n, ne;
-	cin >> n >> ne;
+	int n;
+	cin >> n;
 	
-	vt(vt(int)) ke(n + 1);
+	vt(int) v(n);
+	in(v, n);
 	
-	fr(i, 0, ne)
-	{
-		int u, v;
-		cin >> u >> v;
-		ke[u].push_back(v);
-		ke[v].push_back(u);
-	}
-	
-	if (chutrinh(ke, n))
-		cout << "YES";
-	else 
-		cout << "NO";
-	
-	cout << '\n';
+	cout << miniumInsert(v, n) << '\n';
 }
 
 __ducsjukap__

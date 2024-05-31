@@ -35,57 +35,22 @@ typedef long double ld;
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
-{
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
-
-    return true;
-}
-
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
-{
-    fe(j, 1, m)
-    {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
-
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
-
-            vertex_color[i] = 0;
-        }
-    }
-
-    return false;
-}
-
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
+    int n;
+    cin >> n;
+    vt(int) a(n), b(n - 1);
+    for (int &i : a)
+        cin >> i;
+    for (int &i : b)
+        cin >> i;
+    b.push_back(0);
 
-    vt(vt(int)) ke(n + 1);
-
-    fr(i, 0, ne)
+    fr(i, 0, n) if (a[i] != b[i])
     {
-        int u, v;
-        cin >> u >> v;
-        ke[u].pb(v);
-        ke[v].pb(u);
+        cout << i + 1 << '\n';
+        return;
     }
-
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
-
-    cout << '\n';
 }
 
 __ducsjukap__

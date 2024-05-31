@@ -1,3 +1,15 @@
+// 2 4 1 2 10 2 3
+//  1 2 2 2 3 4 10
+/*
+cp     dai       arr
+3       3   2 2 3 3 4 10
+7       4   3 3 4 4 10
+13      6   4 4 6 10
+21      8   6 8 10
+35      14  10 14
+59      24  24
+*/
+
 // * Code by Ducsjukapvippro
 // * dont cry bae =))
 // * neu ngay mai khong den thi sao?
@@ -6,6 +18,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <set>
+#include <queue>
 
 using namespace std;
 
@@ -34,58 +48,40 @@ typedef long double ld;
 #define in(x, n) fr(itr, 0, n) cin >> x[itr]
 #define out(x, n, sep) fr(itr, 0, n) cout << x[itr] << sep
 #define reset(x, n, value) fr(itr, 0, n) x[itr] = value
+int m = 1e9 + 7;
 
-bool check_coloring(vt(int) & vertex_color, vt(int) & ke, int &color)
+bool cmp(ll &a, ll &b) { return a < b; }
+int calc(vt(int) & v, int &n)
 {
-    for (int &t : ke)
-        if (vertex_color[t] == color)
-            return false;
+    priority_queue<ll, vt(ll), greater<ll>> pq(all(v));
 
-    return true;
-}
+    ll res = 0, a;
 
-bool Try(vt(int) & vertex_color, vt(vt(int)) & ke, int &n, int &m, int i)
-{
-    fe(j, 1, m)
+    while (sz(pq) > 1)
     {
-        if (check_coloring(vertex_color, ke[i], j))
-        {
-            vertex_color[i] = j;
+        a = pq.top();
+        pq.pop();
+        a += pq.top();
+        pq.pop();
 
-            if (i == n)
-                return true;
-            else if (Try(vertex_color, ke, n, m, i + 1) == true)
-                return true;
+        a %= m;
+        pq.push(a);
 
-            vertex_color[i] = 0;
-        }
+        res += a;
+        res %= m;
     }
 
-    return false;
+    return res;
 }
 
 void __vippro__()
 {
-    int n, ne, m;
-    cin >> n >> ne >> m;
+    int n;
+    cin >> n;
+    vt(int) v(n);
+    in(v, n);
 
-    vt(vt(int)) ke(n + 1);
-
-    fr(i, 0, ne)
-    {
-        int u, v;
-        cin >> u >> v;
-        ke[u].pb(v);
-        ke[v].pb(u);
-    }
-
-    vt(int) vertex_color(n + 1, 0);
-    if (Try(vertex_color, ke, n, m, 1))
-        cout << "YES";
-    else
-        cout << "NO";
-
-    cout << '\n';
+    cout << calc(v, n) << '\n';
 }
 
 __ducsjukap__

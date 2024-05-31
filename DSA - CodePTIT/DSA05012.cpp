@@ -20,56 +20,27 @@ typedef long long ll;
 #define reset(x, n, value) fr (itr, 0, n) x[itr] = value;
 
 #define __ducsjukap__ int main()
-
-	
-
-bool dfs(vt(vt(int)) &ke, vt(bool) &unused, int &n, int u, int par)
-{
-	unused[u] = false;
-	
-	for (int &v : ke[u])
-		if (unused[v])
-		{
-			if (dfs(ke, unused, n, v, u))
-				return true;
-		}
-		else if (v != par)
-			return true;
-	
-	return false;
- } 
-
-bool chutrinh(vt(vt(int)) &ke, int &n)
-{
-	vt(bool) unused(n + 1, true);
-	fe (i, 1, n)
-		if (unused[i])
-			if (dfs(ke, unused, n, i, 0))
-				return true;
-	return false;
-}
-
+int m  = 1e9 + 7;
 void vippro()
 {
-	int n, ne;
-	cin >> n >> ne;
+	int n, k;
 	
-	vt(vt(int)) ke(n + 1);
+	cin >> n >> k;
+	vt(vt(int)) c(n + 1, vt(int)(n + 1, 0)); // v[i][j] = c(i, j)
+	// c(n, k) = n!/(k!.(n - k))!)
 	
-	fr(i, 0, ne)
-	{
-		int u, v;
-		cin >> u >> v;
-		ke[u].push_back(v);
-		ke[v].push_back(u);
-	}
+	fe(i, 0, n)
+		fe(j, 0, i)
+			if (j == 0 || j == i)
+				c[i][j] = 1;
+			else
+			{
+				c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+				c[i][j] %= m;
+			}
 	
-	if (chutrinh(ke, n))
-		cout << "YES";
-	else 
-		cout << "NO";
+	cout << c[n][k] << '\n';
 	
-	cout << '\n';
 }
 
 __ducsjukap__

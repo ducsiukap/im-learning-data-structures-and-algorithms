@@ -21,30 +21,29 @@ typedef long long ll;
 
 #define __ducsjukap__ int main()
 
-	
-
-bool dfs(vt(vt(int)) &ke, vt(bool) &unused, int &n, int u, int par)
+bool dfs(vt(vt(int)) &ke, vt(int) &color, int &n, int &u)
 {
-	unused[u] = false;
+	color[u] = 1;
 	
 	for (int &v : ke[u])
-		if (unused[v])
+		if (color[v] == 0)
 		{
-			if (dfs(ke, unused, n, v, u))
+			if (dfs(ke, color, n, v))
 				return true;
 		}
-		else if (v != par)
+		else if (color[v] == 1)
 			return true;
 	
+	color[u] = 2;
 	return false;
- } 
+}
 
 bool chutrinh(vt(vt(int)) &ke, int &n)
 {
-	vt(bool) unused(n + 1, true);
-	fe (i, 1, n)
-		if (unused[i])
-			if (dfs(ke, unused, n, i, 0))
+	vt(int) color(n + 1, 0);
+	fe(i, 1, n)
+		if (color[i] == 0)
+			if (dfs(ke, color, n, i))
 				return true;
 	return false;
 }
@@ -61,13 +60,12 @@ void vippro()
 		int u, v;
 		cin >> u >> v;
 		ke[u].push_back(v);
-		ke[v].push_back(u);
 	}
 	
 	if (chutrinh(ke, n))
 		cout << "YES";
 	else 
-		cout << "NO";
+		cout << "NO\n";
 	
 	cout << '\n';
 }
